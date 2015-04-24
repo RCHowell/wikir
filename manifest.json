@@ -1,0 +1,36 @@
+{
+	"manifest_version": 2,
+	"name": "Wikir",
+	"description": "This extension makes Wikipedia more readable and allows users to create accounts and save articles.",
+	"version":"0.1",
+	"page_action":{
+		"default_icon": "images/icon.png",
+		"default_title": "Wikir | Improving Wikipedia"
+	},
+	"background":{
+		"scripts": ["scripts/jquery.js", "scripts/background.js"],
+		"persistant": false
+	},
+	"permissions":[
+		"declarativeContent"
+	],
+	"icons": { 
+		"16": "images/icon16.png",
+        "48": "images/icon48.png",
+        "128": "images/icon128.png"
+    },
+    "content_scripts":[
+    	{
+    		"matches":["https://en.wikipedia.org/*"],
+    		"js":["scripts/jquery.js", "scripts/function.js"],
+    		"css":["style.css"],
+    		"run_at":"document_end"
+    	}
+    ],
+    "web_accessible_resources":[
+    	"images/*.png",
+    	"inject.html",
+    	"scripts/parse.js",
+    	"images/loading.gif"
+    ]
+}

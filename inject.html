@@ -1,0 +1,283 @@
+<script type="text/javascript" id="menu-script">
+	var menu = false;
+	var id = chrome.runtime.id;
+	$(document).ready(function(){
+		$.ajax({ // get html for the menu
+			url : getUrl('scripts/parse.js'),
+			type: "script",
+			success : function(result){ // returns HTML for the menu
+				var script = document.createElement('script');
+				script.innerHTML = result;
+				$('head').append(script);
+				Parse.initialize("rGZyxwm9QJ5UxEP0BpbXkvt96cR6JKNVnYd31L1G", "qnTdBjyYUjYVTbyR6RLVZwd219TbQCJo2Zqswq6N");
+				if(Parse.User.current()){
+					isLoggedIn();
+				}
+			},
+			fail: function(){
+				alert("Could not load Parse. User accounts will not work");
+			}
+		});
+
+		$('#wikir-menu-icon').click(function(){
+			toggleMenu();
+		});
+
+		$('#wikir-logout').click(function(){
+			Parse.User.logOut();
+			window.location.reload();
+		});
+
+		$('#wikir-favorites-add').click(function(){
+			addFavorite();
+		});
+
+		$('#wikir-showLogin').click(function() {
+			$('#wikir-login-form').show();
+			$('#wikir-createAccount-form').hide();
+		});
+
+		$('#wikir-showCreate').click(function() {
+			$('#wikir-login-form').hide();
+			$('#wikir-createAccount-form').show();
+		});
+
+		$('#wikir-mw-panel').append($('#mw-panel').html()); // append wiki menu to the panel
+		$('#mw-panel').remove();
+
+		if($('#toc').html()){
+			$('#wikir-toc-wrapper').append($('#toc').html()); // append table of contents to a fixed div
+			$('#toc').remove();
+		}else{
+			$('#wikir-content').css('left','0');
+			$('#wikir-toc').remove();
+		}
+
+		$('#wikir-content').append($('#content'));
+		$('#wikir-content').append($('#footer'));
+		$('#wikir-logo').attr('src', getUrl('images/logo.png'));
+		$('#wikir-menu-icon').attr('src',getUrl('images/menu.png'));
+		$('#wikir-favorites-add').attr('src', getUrl('images/add.png'));
+
+		$('#wikir-login-form').submit(function(e){
+			e.preventDefault();
+			login();
+		});
+
+		$('#wikir-createAccount-form').submit(function(e){
+			e.preventDefault();
+			create();
+		});
+	});
+
+	function toggleMenu() {
+		if(menu){
+			$('#wikir-panel').css('left','-336px');
+			$('#wikir-menu-icon').css('left','0px');
+			$('#wikir-menu-icon').attr('src',getUrl('images/menu.png'));
+			$('#wikir-logo').fadeIn();
+			menu = false;
+		}else{
+			$('#wikir-panel').css('left','0px');
+			$('#wikir-menu-icon').css('left','243px');
+			$('#wikir-menu-icon').attr('src', getUrl('images/close.png'));
+			$('#wikir-logo').hide();
+			menu = true;
+		}
+	}
+
+	function getUrl(resource){
+		return 'chrome-extension://' + id + '/' + resource;
+	}
+
+	function create(){
+		var children = $('#wikir-createAccount-form').children().toArray();
+		function validate(){
+			var valid = true;
+			children.forEach(function(i){
+				if(i.value == ''){
+					i.style.border = '1px solid #ff0000';
+					$('#wikir-createAccount-error').html("Please fill out all parts");
+					$('#wikir-createAccount-error').show();
+					valid = false;
+				}
+			});
+			if(valid){
+				if($('#wikir-create-password').val() != $('#wikir-confrim-password').val()){
+					$('#wikir-createAccount-error').html("Passwords do not match");
+					$('#wikir-createAccount-error').show();
+					valid = false;
+				}
+			}
+			if(valid){
+				if($('#wikir-create-password').val().length < 6){
+					$('#wikir-createAccount-error').html("Password must be at least 6 characters");
+					$('#wikir-createAccount-error').show();
+					valid = false;
+				}
+			}
+			if(valid){
+				if($('#wikir-create-username').val().length > 25 || $('#wikir-create-password').val().length > 25){
+					$('#wikir-createAccount-error').html("Each input must be less than 25 characters");
+					$('#wikir-createAccount-error').show();
+					valid = false;
+				}
+			}
+			return valid;
+		}
+		if(validate()){
+			var user = new Parse.User();
+			user.set("username", $('#wikir-create-username').val());
+			user.set("password", $('#wikir-create-password').val());
+			 
+			user.signUp(null, {
+			  success: function(user) {
+			    $('#wikir-createAccount-success').show();
+			    $('#wikir-createAccount-form').hide();
+			    $('#wikir-login-form').show();
+			    var Favorites = Parse.Object.extend("Favorites");
+				var favs = new Favorites();
+				favs.set("userKey", Parse.User.current().id);
+				var array = ["init"];
+				favs.set("list", array);
+				favs.save();
+			  },
+			  error: function(user, error) {
+			    // Show the error message somewhere and let the user try again.
+			    $('#wikir-createAccount-error').show();
+			    $('#wikir-createAccount-error').html(error.message);
+			  }
+			});
+		}
+	}
+
+	function login(){
+		var username = $('#wikir-username').val();
+		var password = $('#wikir-password').val();
+		Parse.User.logIn(username, password, {
+		  success: function(user) {
+		    // Do stuff after successful login.
+		  	isLoggedIn();
+		  },
+		  error: function(user, error) {
+		    // The login failed. Check error to see why.
+		    $('#wikir-login-error').show();
+		    $('#wikir-login-error').html(error.message);
+		  }
+		});
+	}
+
+	function isLoggedIn(){
+		$('#wikir-logged-in').show();
+		$('#wikir-logged-in-id').html(Parse.User.current().attributes.username);
+		$('#wikir-login').hide();
+		$('#wikir-favorites-add').show();
+		var favs;
+		var Favorites = Parse.Object.extend("Favorites");
+		var query = new Parse.Query(Favorites);
+		query.equalTo("userKey", Parse.User.current().id);
+		query.find({
+			success: function(results){
+				favs = results[0];
+				buildFavs();
+			},
+			error: function(error){
+				alert("Couldn't find favorites list. " + error.message);
+			}
+		});
+
+		function buildFavs(){
+			$('#wikir-logged-in ul').html("");
+			var favoritesArray = favs.get("list");
+			for(var i = 1; i < favoritesArray.length; i++){ // start at 1 so "init" is not included
+				var entry = favoritesArray[i].split('|&|');
+				var li = document.createElement('li');
+				var a = document.createElement('a');
+				a.href = entry[1];
+				a.innerHTML = entry[0];
+				li.appendChild(a);
+				$('#wikir-logged-in ul').append(li);
+			}
+		}
+	}
+
+	function addFavorite(){
+		$("#wikir-favorites-add").attr('src', getUrl('images/loading.gif'));
+		$("#wikir-favorites-add").css('pointer-events', 'none');
+		var id = Parse.User.current().id;
+		var favs;
+		var Favorites = Parse.Object.extend("Favorites");
+		var query = new Parse.Query(Favorites);
+		query.equalTo("userKey", Parse.User.current().id);
+		query.find({
+			success: function(results){
+				favs = results[0];
+				callback();
+			},
+			error: function(error){
+				alert("Couldn't find favorites list. " + error.message);
+			}
+		});
+
+		function callback(){
+			favs.add("list", $("#firstHeading").html() + "|&|" + window.location); // |&| is used in a regex later to split the entry. So there' only one array of strings in Parse
+			favs.save(null,{
+	  			success: function(object) {
+	  				$("#wikir-favorites-add").attr('src', getUrl('images/check.png'));
+	  				$("#wikir-favorites-add").css('pointer-events', 'default');
+			  	},
+			  	error: function(object, error) {
+			    	alert(error.message);
+			  	}
+			 });
+		}
+	}
+
+</script>
+
+<div id='wikir-menu'>
+	<img id='wikir-logo' title='Wikipedia' alt='Wikipedia Logo'>
+	<img id='wikir-menu-icon' title='Menu' alt='Menu'>
+</div>
+<div id='wikir-panel'>
+	<img id='wikir-mw-logo' src='https://upload.wikimedia.org/wikipedia/en/b/bc/Wiki.png'>
+	<div id='wikir-login'>
+		<h3>Login | Save Articles</h3>
+		<!-- <h5>Save articles with Wikir</h5> -->
+		<div id='wikir-createAccount-success'>
+			<h4>Success!<h4>
+			<p>Sign in below</p>
+		</div>
+		<form id='wikir-login-form'>
+			<div id="wikir-login-error"></div>
+			<a href='#createAccount' id='wikir-showCreate'>create an account</a>
+			<input type='text' placeholder='Username' id='wikir-username'>
+			<input type='password' placeholder='Password' id='wikir-password'>
+			<button id='wikir-login-button' value='Submit'>Login</button>
+		</form>
+		<form id='wikir-createAccount-form'>
+			<div id="wikir-createAccount-error"></div>
+			<a href='#login' id="wikir-showLogin">I already have an account</a>
+			<input type='text' placeholder='Username' id='wikir-create-username'>
+			<input type='password' placeholder='Password' id='wikir-create-password'>
+			<input type='password' placeholder='Confirm Password' id='wikir-confrim-password'>
+			<button id='wikir-create-button' value='Submit'>Create</button>
+		</form>
+	</div>
+	<div id='wikir-logged-in'>
+		<a href='#logout' id="wikir-logout">logout</a>
+		<p id="wikir-logged-in-id"></p>
+		<h3>Favorites</h3>
+		<ul>
+			<p>No favorites loaded</p>
+		</ul>
+	</div>
+	<img id='wikir-favorites-add' title='Add to favorites'>
+	<div id='wikir-mw-panel'>
+
+	</div>
+</div>
+<div id='wikir-toc'>
+	<div id='wikir-toc-wrapper'></div>
+</div>
+<div id='wikir-content'></div>

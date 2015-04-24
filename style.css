@@ -1,0 +1,314 @@
+#body{
+	
+}
+
+#bodyContent{
+	margin: 0 auto;
+	padding: 40px;
+	max-width: 750px;
+	color: #444;
+	font-size: 1.1em;
+	line-height: 1.7em;
+}
+#wikir-content{
+	position: absolute;
+	top: 80px;
+	left: 370px;
+	right: 0;
+}
+#firstHeading{
+	margin: 20px auto;
+	max-width: 800px;
+	color: #444;
+	font-size: 2em;
+}
+#content{
+	margin-left: 0;
+}
+#mw-head{
+	width: auto !important;
+	left: 370px;
+	top: 0;
+	right: 0 !important;
+}
+#mw-panel{
+	display: none;
+}
+#wikir-menu{
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 80px;
+	z-index: 999;
+	width: 370px;
+}
+#wikir-close-icon-src, #wikir-menu-icon-src{
+	display: none;
+}
+#p-lang{
+	padding-bottom: 120px;
+}
+#wikir-logo{
+	position: absolute;
+	height: 80px;
+	margin: 0;
+	padding: 0;
+	left: 100px;
+	top: 0;
+	pointer-events: none;
+	z-index: 999;
+}
+#wikir-menu-icon{
+	position: fixed;
+	height: 24px;
+	width: 36px;
+	padding: 28px;
+	margin: 0;
+	left: 0;
+	top: 0;
+	opacity: 0.5;
+	transition: 0.2s;
+	cursor: pointer;
+	z-index: 999;
+}
+#wikir-menu-icon:hover{
+	background: #d7d7d7;
+}
+#wikir-panel{
+	position: fixed;
+	height: 100vh;
+	width: 335px;
+	left: -336px;
+	top: 0;
+	z-index: 998;
+	overflow-y: scroll;
+	background: #f6f6f6;
+	margin: 0;
+	padding: 80px 0 20px 0;
+	border-right: 1px solid #d7d7d7;
+	transition: 0.2s;
+	-webkit-box-shadow: 10px 0px 74px -16px rgba(68,68,68,1);
+	-moz-box-shadow: 10px 0px 74px -16px rgba(68,68,68,1);
+	box-shadow: 10px 0px 74px -16px rgba(68,68,68,1);
+}
+#wikir-panel::-webkit-scrollbar { 
+    display: none; 
+}
+#wikir-panel-border{
+	position: absolute;
+	top: 80px;
+	height: 1px;
+	width: 100%;
+	background: #a7d7f9;
+}
+#mw-head, #mw-page-base{
+	
+}
+#left-navigation{
+	margin-left: 0 !important;	
+}
+/*.vertical-navbox{
+	position: absolute;
+	top: 120px;
+	right: 8px;
+}*/
+#wikir-login{
+	display: block;
+	margin: 20px 40px;
+	padding: 0;
+}
+#wikir-login h3{
+	font-family: "Linux Libertine",Georgia,Times,serif;
+	border-bottom: 1px solid #e7e7e7;
+}
+#wikir-login-form, #wikir-createAccount-form{
+	margin: 8px 0;
+	padding: 0;
+}
+#wikir-login input{
+	display: block;
+	outline: none;
+	background: #f8f8f8;
+	border-radius: 4px;
+	border: none;
+	border: 1px solid #d7d7d7;
+	padding: 12px;
+	margin: 12px auto;
+	font-size: 1em;
+}
+#wikir-login a{
+	display: block;
+	text-align: center;
+	margin: 16px auto 4px auto;
+}
+#wikir-login h5{
+	display: block;
+	text-align: center;
+	margin: 4px auto;
+	padding: 0;
+	line-height: 1em;
+}
+#wikir-login button{
+	display: block;
+	margin: 12px auto;
+}
+#wikir-mw-panel{
+	display: block;
+	padding: 0 0 20px 0;
+	margin: 20px 40px;
+}
+#wikir-mw-panel ul{
+	text-decoration: none;
+	list-style: none;
+}
+#wikir-mw-panel .portal{
+	margin: 12px 0;
+}
+#wikir-mw-panel h3{
+	font-family: "Linux Libertine",Georgia,Times,serif;
+	border-bottom: 1px solid #e7e7e7;
+}
+#wikir-mw-logo{
+	display: block;
+	margin: -60px auto 0 auto;
+}
+#p-logo{
+	display: none;
+}
+#wikir-toc{
+	position: fixed;
+	height: 100vh;
+	overflow: scroll;
+	top: 80px;
+	left: 0;
+	width: 290px;
+	margin: 0;
+	padding: 0 40px;
+	background: #f6f6f6;
+	z-index: 997;
+	/*-webkit-box-shadow: 10px 0px 74px -16px rgba(68,68,68,1);
+	-moz-box-shadow: 10px 0px 74px -16px rgba(68,68,68,1);
+	box-shadow: 10px 0px 74px -16px rgba(68,68,68,1);*/
+}
+#wikir-toc-wrapper{
+	display: block;
+	padding-bottom: 120px;
+}
+#wikir-toc:last-child{
+	padding-bottom: 80px;
+}
+#wikir-toc::-webkit-scrollbar { 
+    display: none; 
+}
+#wikir-toc h2{
+	font-family: "Linux Libertine",Georgia,Times,serif;
+}
+#toc{
+	display: none !important;
+}
+.toctoggle{
+	display: none;
+}
+#wikir-extension-id{
+	display: none;
+}
+
+#wikir-createAccount-form{
+	display: none;
+}
+
+#wikir-login-form{
+	display: block;
+}
+
+#wikir-createAccount-error{
+	display: none;
+	width: 200px;
+	border-radius: 4px;
+	color: #fff;
+	padding: 12px;
+	margin: 12px auto;
+	background: #D1626F;
+}
+
+#wikir-login-error{
+	display: none;
+	width: 200px;
+	border-radius: 4px;
+	color: #fff;
+	padding: 12px;
+	margin: 12px auto;
+	background: #D1626F;
+}
+
+#wikir-createAccount-success{
+	display: none;
+	width: 200px;
+	padding: 12px;
+	margin: 0 auto;
+}
+#wikir-createAccount-success h4{
+	margin: 0;
+	padding: 0;
+	line-height: 1.1em;
+	font-size: 1.3em;
+	font-weight: bold;
+}
+#wikir-createAccount-success p{
+	margin: 0;
+	padding: 0;
+	line-height: 1.5em;
+	font-size: 1em;
+	font-weight: normal;
+}
+#wikir-logged-in{
+	display: none;
+	margin: 20px auto;
+	padding: 0;
+	width: 255px;
+}
+#wikir-logged-in h3{
+	font-family: "Linux Libertine",Georgia,Times,serif;
+	border-bottom: 1px solid #e7e7e7;
+}
+#wikir-logged-in p{
+	margin: 12px 0;
+	padding: 12px;
+	line-height: 1.5em;
+	font-size: 1em;
+	background: #f8f8f8;
+	border-radius: 4px;
+	border: 1px solid #e7e7e7;
+}
+
+#wikir-logged-in ul{
+	list-style-type: none;
+	margin: .3em 0 0 1.6em;
+	padding: 0;
+	list-style: none;
+}
+#wikir-logout{
+	float: right;
+	margin: 0;
+	line-height: 1.5em;
+	font-size: 1em;
+	padding: 12px;
+}
+#wikir-favorites-add{
+	display: none;
+	position: fixed;
+	right: 40px;
+	bottom: 40px;
+	padding: 13px;
+	margin: 0;
+	height: 44px;
+	width: 44px;
+	background: #A3D5FF;
+	border-radius: 100%;
+	cursor: pointer;
+	-webkit-box-shadow: 0px 10px 26px 0px rgba(68,68,68,0.4);
+	box-shadow: 0px 10px 26px 0px rgba(68,68,68,0.4);
+}
+#wikir-favorites-add:hover{
+	background: #97C6ED;
+}
